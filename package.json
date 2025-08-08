@@ -29,7 +29,6 @@
     "@ant-design/icons-angular": "20.0.0",
     "@ng-bootstrap/ng-bootstrap": "19.0.0",
     "@popperjs/core": "2.11.8",
-    "apexcharts": "4.7.0",
     "bootstrap": "5.3.7",
     "ng-apexcharts": "1.16.0",
     "ngx-scrollbar": "18.0.0",

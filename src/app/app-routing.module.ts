@@ -22,6 +22,12 @@ const routes: Routes = [
             .then((c) => c.ProductFormComponent)
       },
       {
+        path: 'dashboard/products/update/:id',
+        loadComponent: () =>
+          import('./presentation/pages/dashboard/product-form/product-form.component')
+            .then((c) => c.ProductFormComponent)
+      },
+      {
         path: 'dashboard/products/list',
         loadComponent: () =>
           import('./presentation/pages/dashboard/product-list/product-list.component')
