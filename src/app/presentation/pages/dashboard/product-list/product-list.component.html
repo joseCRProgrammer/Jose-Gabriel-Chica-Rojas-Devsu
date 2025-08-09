@@ -5,9 +5,37 @@
     </div>
   </div>
 } @else {
-<div class="row">
-  
-  
-  <!-- [ sample-page ] end -->
-</div>
+<section class="list-page">
+  <div class="toolbar">
+    <app-search placeholder="Search..." (searchChange)="onSearch($event)"></app-search>
+    <app-button
+      label="Agregar"
+      color="yellow"
+      (clicked)="onAddProduct()"
+    ></app-button>
+  </div>
+  <div class="card">
+    <app-product-table
+      #tbl
+      [data]="filteredProducts"
+      [columns]="cols"
+      [showActions]="true"
+      [actions]="rowActions"
+      [loading]="loading"
+      [errorMsg]="errorMsg"
+      [pageSize]="5"
+      (action)="onAction($event)">
+    </app-product-table>
+
+    <app-modal
+    [open]="confirmOpen"
+    [message]="'¿Estás seguro de eliminar el producto ' + (productToDelete?.name ?? '') + '?'"
+    cancelLabel="Cancelar"
+    confirmLabel="Confirmar"
+    (cancel)="cancelDelete()"
+    (confirm)="confirmDelete()"
+    >
+    </app-modal>
+  </div>
+</section>
 }

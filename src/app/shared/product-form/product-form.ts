@@ -4,13 +4,14 @@ import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, Validati
 import { Subscription, of, timer, switchMap, map, catchError } from 'rxjs';
 import { Product } from '../models/product.model';
 import { ProductService } from '../services/product.service';
+import { ButtonComponent } from '../button/button';
 
 type Mode = 'create' | 'edit';
 
 @Component({
   selector: 'app-product-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ButtonComponent],
   templateUrl: './product-form.html',
   styleUrls: ['./product-form.scss']
 })

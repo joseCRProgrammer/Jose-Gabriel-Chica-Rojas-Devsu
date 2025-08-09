@@ -52,10 +52,19 @@
       }
     </label>
     <div class="actions full">
-      <button type="button" class="btn btn-reset" (click)="onReset()">Reiniciar</button>
-      <button type="submit" class="btn btn-submit" [disabled]="form.invalid">
-        {{ mode === 'create' ? 'Enviar' : 'Guardar cambios' }}
-      </button>
+      <app-button
+        label="Reiniciar"
+        color="gray"
+        type="button"
+        (clicked)="onReset()">
+      </app-button>
+
+      <app-button
+        [label]="mode === 'create' ? 'Enviar' : 'Guardar cambios'"
+        color="yellow"
+        type="submit"
+        [disabled]="form.invalid">
+      </app-button>
     </div>
   </form>
 </section>
