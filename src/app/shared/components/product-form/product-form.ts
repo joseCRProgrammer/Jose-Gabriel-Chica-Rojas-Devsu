@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
-import { Subscription, of, timer, switchMap, map, catchError } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Product } from '../../../core/models/product.model';
 import { ButtonComponent } from '../button/button';
 
@@ -113,10 +113,65 @@ export class ProductForm implements OnInit, OnDestroy {
     this.submitForm.emit(payload);
   }
 
-  onReset() {
-    this.form.reset();
-    this.resetForm.emit();
+ onReset() {
+  if (this.mode === 'edit') {
+    this.resetForEdit();
+  } else {
+    this.form.reset(
+      {
+        id: '',         
+        name: '',
+        description: '',
+        logo: '',
+        date_release: null,
+        date_revision: null
+      },
+      { emitEvent: false }
+    );
+
+    this.form.get('date_revision')?.disable({ emitEvent: false });
+
+    Object.values(this.form.controls).forEach(c => {
+      c.markAsPristine();
+      c.markAsUntouched();
+      c.updateValueAndValidity({ emitEvent: false });
+    });
   }
+
+  this.resetForm.emit();
+}
+
+private resetForEdit() {
+  const idCtrl = this.form.get('id');
+  const idValue =
+    this.initial?.id ??
+    idCtrl?.getRawValue() ?? 
+    '';
+
+  this.form.patchValue(
+    {
+      id: idValue,
+      name: '',
+      description: '',
+      logo: '',
+      date_release: null,
+      date_revision: null
+    },
+    { emitEvent: false }
+  );
+
+  idCtrl?.disable({ emitEvent: false });
+
+  this.form.get('date_revision')?.disable({ emitEvent: false });
+
+  ['name', 'description', 'logo', 'date_release', 'date_revision'].forEach(k => {
+    const c = this.form.get(k)!;
+    c.markAsPristine();
+    c.markAsUntouched();
+    c.updateValueAndValidity({ emitEvent: false });
+  });
+}
+
 
   private toIsoDate(v: any): string {
     if (!v) return '';
