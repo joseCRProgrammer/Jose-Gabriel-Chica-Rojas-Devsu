@@ -4,12 +4,14 @@
 
 import packageInfo from '../../package.json';
 
+// environments/environment.ts
 export const environment = {
   appVersion: packageInfo.version,
-  production: false,
-  apiUrl: 'http://localhost:3002'
-
+  production: true,
+  apiUrl: '/bp'
 };
+
+
 
 /*
  * For easier debugging in development mode, you can import the following file
