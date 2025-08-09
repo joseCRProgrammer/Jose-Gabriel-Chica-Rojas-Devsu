@@ -2,8 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject } fro
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
 import { Subscription, of, timer, switchMap, map, catchError } from 'rxjs';
-import { Product } from '../models/product.model';
-import { ProductService } from '../services/product.service';
+import { Product } from '../../core/models/product.model';
 import { ButtonComponent } from '../button/button';
 
 type Mode = 'create' | 'edit';
@@ -17,14 +16,12 @@ type Mode = 'create' | 'edit';
 })
 export class ProductForm implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
-  private svc = inject(ProductService);
 
   @Input() mode: Mode = 'create';
   @Input() initial: Product | null = null;
 
   @Output() submitForm = new EventEmitter<Product>();
   @Output() resetForm = new EventEmitter<void>();
-  @Output() cancel = new EventEmitter<void>();
 
   form = this.fb.group({
     id: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10), Validators.pattern(/^[a-z0-9-]+$/)]],
@@ -52,7 +49,6 @@ export class ProductForm implements OnInit, OnDestroy {
     if (this.mode === 'edit') {
       this.form.get('id')?.disable();
     } else {
-      this.form.get('id')?.addAsyncValidators(this.uniqueIdValidator());
       this.form.get('id')?.updateValueAndValidity({ emitEvent: false });
     }
 
@@ -97,17 +93,6 @@ export class ProductForm implements OnInit, OnDestroy {
     };
   }
 
-  private uniqueIdValidator(): AsyncValidatorFn {
-    return (control) => {
-      const v = (control.value ?? '').toString().trim();
-      if (!v || control.invalid) return of(null);
-      return timer(300).pipe(
-        switchMap(() => this.svc.verifyId(v)),
-        map(exists => (exists ? { idTaken: true } : null)),
-        catchError(() => of(null))
-      );
-    };
-  }
 
   onSubmit() {
     if (this.form.invalid) {

@@ -1,27 +1,47 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Product } from 'src/app/shared/models/product.model';
+import { Router } from '@angular/router';
+
+import { Product } from 'src/app/core/models/product.model';
 import { PageHeader } from 'src/app/shared/page-header/page-header';
 import { ProductForm } from 'src/app/shared/product-form/product-form';
+
+import { ProductFacade } from 'src/app/application/facades/product.facade';
+import { ToastService } from 'src/app/shared/toast/toast.service';
+
 
 @Component({
   standalone: true,
   selector: 'app-product-create',
-  imports: [
-    CommonModule,
-    PageHeader,
-    ProductForm
-],
+  imports: [CommonModule, PageHeader, ProductForm],
   templateUrl: './product-create.component.html',
   styleUrl: './product-create.component.scss'
 })
 export class ProductCreateComponent {
-  loading = false;
+  private facade = inject(ProductFacade);
+  private router = inject(Router);
+  private toast =  inject(ToastService);
 
-  onCreate(p: Product) {
-    console.log('CREATE ->', p);
-  }
-  onCancel() {
-    console.log('cancel create');
+  readonly loading = this.facade.loading;
+  readonly error   = this.facade.error;
+
+  async onCreate(p: Product) {
+    // Verificar ID antes de crear
+    const idAvailable = await this.facade.verifyId(p.id);
+
+    if (idAvailable) {
+      this.facade.clearError(); // limpia error anterior
+      const message = `El producto "${p.id}" ya existe en la base de datos`;
+      this.facade['_' + 'error'].set(message);
+      this.toast.error(message);
+      return;
+    }
+
+    // Crear producto
+    const ok = await this.facade.create(p);
+    if (ok) {
+      this.toast.success('Producto creado con éxito');
+      this.router.navigate(['/dashboard/products/list']);
+    }
   }
 }
