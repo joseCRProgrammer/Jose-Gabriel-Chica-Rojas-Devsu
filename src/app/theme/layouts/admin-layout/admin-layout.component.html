@@ -9,6 +9,12 @@
 <app-nav-bar (NavCollapsedMob)="navMobClick()" (NavCollapse)="this.navCollapsed = !this.navCollapsed" />
 <div class="pc-container">
   <div class="coded-wrapper">
+    <app-page-header
+      title="Banco"
+      icon="💵"
+      [iconSize]="28"
+      [showDivider]="true">
+    </app-page-header>
     <div class="coded-content">
       <div class="coded-inner-content">
         <app-breadcrumb />
