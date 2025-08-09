@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Product } from 'src/app/shared/models/product.model';
-import { ProductService } from 'src/app/shared/services/product.service';
+import { Product } from 'src/app/core/models/product.model';
 import { ProductTable, TableColumn } from 'src/app/shared/product-table/product-table';
 import { SearchBox } from 'src/app/shared/search-box/search-box';
 import { ButtonComponent } from 'src/app/shared/button/button';
 import { Router } from '@angular/router';
 import { ModalComponent } from 'src/app/shared/modal/modal';
+import { ProductFacade } from 'src/app/application/facades/product.facade';
 
 @Component({
   standalone: true,
@@ -26,8 +26,8 @@ export class ProductListComponent implements OnInit {
 
   @ViewChild('tbl') table!: ProductTable<Product>;
 
-  loading = false;
-  errorMsg: string | null = null;
+  loading = this.facade.loading();
+  errorMsg = this.facade.error();
 
   confirmOpen = false;
   productToDelete: Product | null = null;
@@ -50,34 +50,21 @@ export class ProductListComponent implements OnInit {
   ];
   constructor(
     private router: Router,
-    private productService: ProductService
+    private facade: ProductFacade
   ) {}
 
   ngOnInit(): void {
-    this.allProducts = this.mock50();
+    this.loadProducts()
+  }
+
+  async loadProducts(){
+    console.log("aaaa");
+    const ok = await this.facade.loadAll();
+
+    console.log(this.facade.all());
+    this.allProducts = this.facade.all();
     this.filteredProducts = [...this.allProducts];
   }
-
-   private mock50(): Product[] {
-    return Array.from({ length: 50 }, (_, i) => {
-      const num = i + 1;
-      const idPrefix = ['trj-crd', 'cta-aho', 'inv-fnd', 'prst-hip', 'seg-vid'][i % 5];
-      const yearRelease = 2005 + (i % 15);
-      const yearRevision = yearRelease + 1;
-      const month = String((i % 12) + 1).padStart(2, '0');
-
-      return {
-        id: `${idPrefix}-${num.toString().padStart(3, '0')}`,
-        name: `Nombre del producto ${num}`,
-        description: `Descripción del producto ${num}`,
-        logo: `https://picsum.photos/seed/p${num}/48/48`,
-
-        date_release: `${yearRelease}-${month}-01`,
-        date_revision: `${yearRevision}-${month}-01`
-      };
-    });
-  }
-
 
   onSearch(term: string) {    
     if (this.table?.applyFilter) {
