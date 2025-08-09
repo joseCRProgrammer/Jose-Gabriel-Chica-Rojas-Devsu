@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { Product } from 'src/app/core/models/product.model';
-import { PageHeader } from 'src/app/shared/page-header/page-header';
-import { ProductForm } from 'src/app/shared/product-form/product-form';
+import { PageHeader } from 'src/app/shared/components/page-header/page-header';
+import { ProductForm } from 'src/app/shared/components/product-form/product-form';
 
 import { ProductFacade } from 'src/app/application/facades/product.facade';
-import { ToastService } from 'src/app/shared/toast/toast.service';
+import { ToastService } from 'src/app/shared/components/toast/toast.service';
 
 
 @Component({

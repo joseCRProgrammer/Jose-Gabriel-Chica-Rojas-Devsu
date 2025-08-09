@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product } from 'src/app/core/models/product.model';
-import { ProductTable, TableColumn } from 'src/app/shared/product-table/product-table';
-import { SearchBox } from 'src/app/shared/search-box/search-box';
-import { ButtonComponent } from 'src/app/shared/button/button';
+import { ProductTable, TableColumn } from 'src/app/shared/components/product-table/product-table';
+import { SearchBox } from 'src/app/shared/components/search-box/search-box';
+import { ButtonComponent } from 'src/app/shared/components/button/button';
 import { Router } from '@angular/router';
-import { ModalComponent } from 'src/app/shared/modal/modal';
+import { ModalComponent } from 'src/app/shared/components/modal/modal';
 import { ProductFacade } from 'src/app/application/facades/product.facade';
+import { EditIntentService } from 'src/app/shared/services/edit-intent.service';
 
 @Component({
   standalone: true,
@@ -50,7 +51,8 @@ export class ProductListComponent implements OnInit {
   ];
   constructor(
     private router: Router,
-    private facade: ProductFacade
+    private facade: ProductFacade,
+    private editIntent: EditIntentService
   ) {}
 
   ngOnInit(): void {
@@ -86,7 +88,10 @@ export class ProductListComponent implements OnInit {
       this.confirmOpen = true;
     }
     if (ev.actionId === 'edit') {
-      this.router.navigate(['/dashboard/products/edit', ev.row.id]);
+      const token = this.editIntent.allowOnce(ev.row.id);
+      this.router.navigate(['/dashboard/products/edit', ev.row.id],
+      { queryParams: { token } }
+      );
     }
   }
 

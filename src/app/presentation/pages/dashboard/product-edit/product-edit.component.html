@@ -10,8 +10,8 @@
     <app-page-header title="Formulario de Registro" icon="" [showDivider]="true"></app-page-header>
     <app-product-form 
     [mode]="'edit'" 
-    (submitForm)="onUpdate($event)" 
-    (cancel)="onCancel()"
+    (submitForm)="onUpdate($event)"
+    [initial]="product"
     >
     </app-product-form>
   </div>

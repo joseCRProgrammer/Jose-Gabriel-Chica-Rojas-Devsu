@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject } fro
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
 import { Subscription, of, timer, switchMap, map, catchError } from 'rxjs';
-import { Product } from '../../core/models/product.model';
+import { Product } from '../../../core/models/product.model';
 import { ButtonComponent } from '../button/button';
 
 type Mode = 'create' | 'edit';

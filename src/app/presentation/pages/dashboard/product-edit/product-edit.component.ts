@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Product } from 'src/app/shared/models/product.model';
-import { PageHeader } from 'src/app/shared/page-header/page-header';
-import { ProductForm } from 'src/app/shared/product-form/product-form';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProductFacade } from 'src/app/application/facades/product.facade';
+import { Product } from 'src/app/core/models/product.model';
+import { PageHeader } from 'src/app/shared/components/page-header/page-header';
+import { ProductForm } from 'src/app/shared/components/product-form/product-form';
+import { ToastService } from 'src/app/shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-product-edit',
@@ -16,29 +18,28 @@ import { ProductForm } from 'src/app/shared/product-form/product-form';
   styleUrl: './product-edit.component.scss'
 })
 
-export class ProductEditComponent implements OnInit {
+export class ProductEditComponent implements OnInit, OnDestroy {
   loading = false;
   product: Product | null = null;
+  private facade = inject(ProductFacade);
+  private router = inject(Router);
+  private toast =  inject(ToastService);
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')!;
-    this.product = {
-      id,
-      name: 'Tarjeta Crédito',
-      description: 'Descripción demo',
-      logo: 'https://picsum.photos/seed/edit/48/48',
-      date_release: '2025-08-08',
-      date_revision: '2026-08-08'
-    };
+    this.product = this.facade.getByIdLocal(id);
+    console.log("este es el editar", this.product)
+    
   }
 
   onUpdate(p: Product) {
     console.log('UPDATE ->', p);
   }
 
-  onCancel() {
-    console.log('cancel edit');
+  ngOnDestroy(): void{
+    history.state.fromEditButton = false
   }
+
 }

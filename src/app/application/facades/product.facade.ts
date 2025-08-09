@@ -74,6 +74,9 @@ export class ProductFacade {
     return r.ok ? r.value : true;
   }
 
+  getByIdLocal(id: string): Product | undefined {
+    return this._all().find(p => p.id === id);
+  }
 
   clearError(): void { this._error.set(null); }
 }
