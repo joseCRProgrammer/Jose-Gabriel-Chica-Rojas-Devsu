@@ -1,0 +1,26 @@
+<div class="adrop">
+    <button 
+    class="icon-btn" 
+    type="button" 
+    (click)="toggle($event)" 
+    [attr.aria-label]="triggerAria">
+    <span class="dots">⋮</span>
+    </button>
+    @if (open) {
+        <div class="menu" role="menu">
+        @for (a of actions; track a.id) {
+            <button
+            type="button"
+            class="menu-item"
+            role="menuitem"
+            [disabled]="a.disabled"
+            (click)="choose(a.id, $event)">
+            @if (a.icon) {
+                <span>{{ a.icon }}</span>
+            }
+            <span>{{ a.label }}</span>
+            </button>
+        }
+        </div>
+    }
+</div>

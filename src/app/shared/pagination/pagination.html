@@ -1,0 +1,32 @@
+<div class="pagination">
+  @if (showSizeSelector) {
+    <label class="page-size">
+      Mostrar
+      <select #sizeSel [value]="pageSize" (change)="onChangeSize(sizeSel.value)">
+        @for (s of pageSizeOptions; track s) {
+          <option [value]="s">{{ s }}</option>
+        }
+      </select>
+    </label>
+  }
+
+  <div class="pager">
+    <button type="button" (click)="prev()" [disabled]="page <= 1">«</button>
+
+    @if (edgeButtons && maxButtons > 1 && showStartEllipsis) {
+      <button type="button" (click)="goto(1)" [class.active]="page===1">1</button>
+      <span class="ellipsis">…</span>
+    }
+
+    @for (p of visible; track p) {
+      <button type="button" (click)="goto(p)" [class.active]="p===page">{{ p }}</button>
+    }
+
+    @if (edgeButtons && maxButtons > 1 && showEndEllipsis) {
+      <span class="ellipsis">…</span>
+      <button type="button" (click)="goto(totalPages)" [class.active]="page===totalPages">{{ totalPages }}</button>
+    }
+
+    <button type="button" (click)="next()" [disabled]="page >= totalPages">»</button>
+  </div>
+</div>
