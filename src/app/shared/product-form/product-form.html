@@ -1,0 +1,61 @@
+<section class="form-card">
+  <form class="grid" (ngSubmit)="onSubmit()" [formGroup]="form" novalidate>
+    <label class="field">
+      <span class="label">ID</span>
+      <input class="input" formControlName="id" placeholder="p. ej. trj-crd" [readonly]="mode==='edit'" [class.invalid]="form.get('id')?.invalid && form.get('id')?.touched">
+      @if (form.get('id')?.touched) {
+        <small class="error" *ngIf="false"></small>
+        @if (form.get('id')?.hasError('required')) { <small class="error">Este campo es requerido</small> }
+        @if (form.get('id')?.hasError('minlength') || form.get('id')?.hasError('maxlength')) { <small class="error">Debe tener entre 3 y 10 caracteres</small> }
+        @if (form.get('id')?.hasError('pattern')) { <small class="error">Solo minúsculas, números y guiones</small> }
+        @if (form.get('id')?.hasError('idTaken')) { <small class="error">ID no válido</small> }
+      }
+    </label>
+    <label class="field">
+      <span class="label">Nombre</span>
+      <input class="input" formControlName="name" placeholder="Tarjeta Crédito" [class.invalid]="form.get('name')?.invalid && form.get('name')?.touched">
+      @if (form.get('name')?.touched) {
+        @if (form.get('name')?.hasError('required')) { <small class="error">Este campo es requerido</small> }
+        @if (form.get('name')?.hasError('minlength') || form.get('name')?.hasError('maxlength')) { <small class="error">Debe tener entre 5 y 100 caracteres</small> }
+      }
+    </label>
+    <label class="field">
+      <span class="label">Descripción</span>
+      <textarea class="input" formControlName="description" rows="1" [class.invalid]="form.get('description')?.invalid && form.get('description')?.touched"></textarea>
+      @if (form.get('description')?.touched) {
+        @if (form.get('description')?.hasError('required')) { <small class="error">Este campo es requerido</small> }
+        @if (form.get('description')?.hasError('minlength') || form.get('description')?.hasError('maxlength')) { <small class="error">Debe tener entre 10 y 200 caracteres</small> }
+      }
+    </label>
+    <label class="field">
+      <span class="label">Logo</span>
+      <input class="input" formControlName="logo" placeholder="https://..." [class.invalid]="form.get('logo')?.invalid && form.get('logo')?.touched">
+      @if (form.get('logo')?.touched) {
+        @if (form.get('logo')?.hasError('required')) { <small class="error">Este campo es requerido</small> }
+        @if (form.get('logo')?.hasError('url')) { <small class="error">URL inválida</small> }
+      }
+    </label>
+    <label class="field">
+      <span class="label">Fecha Liberación</span>
+      <input class="input" type="date" formControlName="date_release" [class.invalid]="form.get('date_release')?.invalid && form.get('date_release')?.touched">
+      @if (form.get('date_release')?.touched) {
+        @if (form.get('date_release')?.hasError('required')) { <small class="error">Este campo es requerido</small> }
+        @if (form.get('date_release')?.hasError('pastDate')) { <small class="error">Debe ser igual o mayor a hoy</small> }
+      }
+    </label>
+    <label class="field">
+      <span class="label">Fecha Revisión</span>
+      <input class="input" type="date" formControlName="date_revision" readonly [class.invalid]="form.get('date_revision')?.invalid && form.get('date_revision')?.touched">
+      @if (form.get('date_revision')?.touched) {
+        @if (form.get('date_revision')?.hasError('required')) { <small class="error">Este campo es requerido</small> }
+        @if (form.get('date_revision')?.hasError('notPlusOneYear')) { <small class="error">Debe ser exactamente +1 año</small> }
+      }
+    </label>
+    <div class="actions full">
+      <button type="button" class="btn btn-reset" (click)="onReset()">Reiniciar</button>
+      <button type="submit" class="btn btn-submit" [disabled]="form.invalid">
+        {{ mode === 'create' ? 'Enviar' : 'Guardar cambios' }}
+      </button>
+    </div>
+  </form>
+</section>
