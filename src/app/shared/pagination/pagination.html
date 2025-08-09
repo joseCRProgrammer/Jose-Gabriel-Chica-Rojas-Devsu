@@ -2,7 +2,11 @@
   @if (showSizeSelector) {
     <label class="page-size">
       Mostrar
-      <select #sizeSel [value]="pageSize" (change)="onChangeSize(sizeSel.value)">
+      <select
+        #sizeSel
+        [value]="pageSize"
+        (change)="onChangeSize(sizeSel.value)"
+        [attr.aria-label]="'Tamaño de página'">
         @for (s of pageSizeOptions; track s) {
           <option [value]="s">{{ s }}</option>
         }
@@ -10,23 +14,54 @@
     </label>
   }
 
-  <div class="pager">
-    <button type="button" (click)="prev()" [disabled]="page <= 1">«</button>
+  <div class="pager" role="navigation" [attr.aria-label]="'Paginación'">
+    <button
+      type="button"
+      (click)="prev()"
+      [disabled]="state.currentPage <= 1"
+      [attr.aria-label]="'Página anterior'">
+      «
+    </button>
 
-    @if (edgeButtons && maxButtons > 1 && showStartEllipsis) {
-      <button type="button" (click)="goto(1)" [class.active]="page===1">1</button>
-      <span class="ellipsis">…</span>
+    @if (edgeButtons && maxButtons > 1 && state.showStartEllipsis) {
+      <button
+        type="button"
+        (click)="goto(1)"
+        [class.active]="state.currentPage === 1"
+        [attr.aria-label]="'Ir a la página 1'">
+        1
+      </button>
+      <span class="ellipsis" aria-hidden="true">…</span>
     }
 
-    @for (p of visible; track p) {
-      <button type="button" (click)="goto(p)" [class.active]="p===page">{{ p }}</button>
+    @for (p of state.visible; track trackByPage($index, p)) {
+      <button
+        type="button"
+        (click)="goto(p)"
+        [class.active]="p === state.currentPage"
+        [attr.aria-label]="'Ir a la página ' + p"
+        [attr.aria-current]="p === state.currentPage ? 'page' : null">
+        {{ p }}
+      </button>
     }
 
-    @if (edgeButtons && maxButtons > 1 && showEndEllipsis) {
-      <span class="ellipsis">…</span>
-      <button type="button" (click)="goto(totalPages)" [class.active]="page===totalPages">{{ totalPages }}</button>
+    @if (edgeButtons && maxButtons > 1 && state.showEndEllipsis) {
+      <span class="ellipsis" aria-hidden="true">…</span>
+      <button
+        type="button"
+        (click)="goto(state.totalPages)"
+        [class.active]="state.currentPage === state.totalPages"
+        [attr.aria-label]="'Ir a la última página'">
+        {{ state.totalPages }}
+      </button>
     }
 
-    <button type="button" (click)="next()" [disabled]="page >= totalPages">»</button>
+    <button
+      type="button"
+      (click)="next()"
+      [disabled]="state.currentPage >= state.totalPages"
+      [attr.aria-label]="'Página siguiente'">
+      »
+    </button>
   </div>
 </div>
