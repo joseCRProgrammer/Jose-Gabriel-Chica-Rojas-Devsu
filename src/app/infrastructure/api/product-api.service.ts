@@ -27,7 +27,7 @@ export class ProductApiService implements ProductRepository {
       );
       return ok(res.data ?? []);
     } catch (e: any) {
-      return err(this.extractMessage(e));
+      return err(this.extractError(e));
     }
   }
 
@@ -38,7 +38,7 @@ export class ProductApiService implements ProductRepository {
       );
       return ok(res.data);
     } catch (e: any) {
-      return err(this.extractMessage(e));
+      return err(this.extractError(e));
     }
   }
 
@@ -50,7 +50,7 @@ export class ProductApiService implements ProductRepository {
       const merged: Product = { id, ...res.data };
       return ok(merged);
     } catch (e: any) {
-      return err(this.extractMessage(e));
+      return err(this.extractError(e));
     }
   }
 
@@ -61,7 +61,7 @@ export class ProductApiService implements ProductRepository {
       );
       return ok<void>(undefined);
     } catch (e: any) {
-      return err(this.extractMessage(e));
+      return err(this.extractError(e));
     }
   }
 
@@ -72,12 +72,12 @@ export class ProductApiService implements ProductRepository {
       );
       return ok(Boolean(exists));
     } catch (e: any) {
-      return err(this.extractMessage(e));
+      return err(this.extractError(e));
     }
   }
 
-  // --- helpers ---
-  private extractMessage(e: any): string {
-    return e?.error?.message ?? e?.message ?? 'Unexpected error';
+  
+  private extractError(e: any): string {
+    return e?.error?.errors ?? e?.errors ?? 'Unexpected error';
   }
 }

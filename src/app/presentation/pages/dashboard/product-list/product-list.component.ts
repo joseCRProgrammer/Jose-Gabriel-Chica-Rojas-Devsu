@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { ModalComponent } from 'src/app/shared/components/modal/modal';
 import { ProductFacade } from 'src/app/application/facades/product.facade';
 import { EditIntentService } from 'src/app/shared/services/edit-intent.service';
+import { ToastService } from 'src/app/shared/components/toast/toast.service';
 
 @Component({
   standalone: true,
@@ -28,7 +29,7 @@ export class ProductListComponent implements OnInit {
   @ViewChild('tbl') table!: ProductTable<Product>;
 
   loading = this.facade.loading();
-  errorMsg = this.facade.error();
+  errorMsg = null
 
   confirmOpen = false;
   productToDelete: Product | null = null;
@@ -52,7 +53,8 @@ export class ProductListComponent implements OnInit {
   constructor(
     private router: Router,
     private facade: ProductFacade,
-    private editIntent: EditIntentService
+    private editIntent: EditIntentService,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -60,10 +62,7 @@ export class ProductListComponent implements OnInit {
   }
 
   async loadProducts(){
-    console.log("aaaa");
     const ok = await this.facade.loadAll();
-
-    console.log(this.facade.all());
     this.allProducts = this.facade.all();
     this.filteredProducts = [...this.allProducts];
   }
@@ -83,15 +82,31 @@ export class ProductListComponent implements OnInit {
   }
 
   onAction(ev: { actionId: string; row: Product }) {
+    console.log("aaaa")
+    console.log(ev)
     if (ev.actionId === 'delete') {
       this.productToDelete = ev.row;
       this.confirmOpen = true;
+      console.log(this)
     }
+
+    //Comentarios para al revisor de este código
+    //Si el producto es eliminado mientras un usuario está viendo la lista, 
+    //un editIntent con validación en el backend o en la lógica de guard puede impedir que se cargue el formulario.
+    //así se evita casos donde el formulario se abra con datos obsoletos o inconsistentes.
+    
     if (ev.actionId === 'edit') {
-      const token = this.editIntent.allowOnce(ev.row.id);
-      this.router.navigate(['/dashboard/products/edit', ev.row.id],
-      { queryParams: { token } }
-      );
+
+      const exist = this.facade.verifyId(ev.row.id)
+      if(exist){
+          const token = this.editIntent.allowOnce(ev.row.id);
+          this.router.navigate(['/dashboard/products/edit', ev.row.id],
+          { queryParams: { token } });
+      }
+      else{
+        this.toast.error("El producto a editar ya no existe, puede ser que lo hayan eliminado previamente")
+      }
+      
     }
   }
 
@@ -100,11 +115,25 @@ export class ProductListComponent implements OnInit {
     this.productToDelete = null;
   }
 
-  confirmDelete() {
+  async confirmDelete() {
     if (!this.productToDelete) return;
     const id = this.productToDelete.id;
-    this.allProducts = this.allProducts.filter(p => p.id !== id);
-    this.confirmOpen = false;
-    this.productToDelete = null;
+    const exist = await this.facade.verifyId(id);
+    console.log(exist)
+    if(exist){
+      await this.facade.remove(id);
+      this.allProducts = this.allProducts.filter(p => p.id !== id);
+      this.filteredProducts = this.allProducts;
+      this.toast.success("El producto se ha eliminado correctamente")
+      console.log(this.allProducts)
+      this.confirmOpen = false;
+      this.productToDelete = null;
+    }
+    else{
+      this.toast.error("el producto a eliminar ya no existe en la base de datos, puede ser que lo hayan eliminado previamente")
+      this.confirmOpen = false;
+      this.productToDelete = null;
+    }
+      
   }
 }

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -18,30 +18,41 @@ import { ToastService } from 'src/app/shared/components/toast/toast.service';
   styleUrl: './product-create.component.scss'
 })
 export class ProductCreateComponent {
+
   private facade = inject(ProductFacade);
-  private router = inject(Router);
-  private toast =  inject(ToastService);
+  private router  = inject(Router);
+  private toast   = inject(ToastService);
 
   readonly loading = this.facade.loading;
   readonly error   = this.facade.error;
 
   async onCreate(p: Product) {
-    // Verificar ID antes de crear
-    const idAvailable = await this.facade.verifyId(p.id);
-
-    if (idAvailable) {
-      this.facade.clearError(); // limpia error anterior
-      const message = `El producto "${p.id}" ya existe en la base de datos`;
-      this.facade['_' + 'error'].set(message);
-      this.toast.error(message);
+    // 1) Verificar ID (true = existe)
+    const idExists = await this.facade.verifyId(p.id);
+    if (idExists) {
+      this.toast.error(`El producto "${p.id}" ya existe en la base de datos`);
       return;
     }
 
-    // Crear producto
+    // 2) Crear
     const ok = await this.facade.create(p);
     if (ok) {
       this.toast.success('Producto creado con éxito');
       this.router.navigate(['/dashboard/products/list']);
+      return;
     }
+    else{
+      const errPayload: any = this.error();
+      const nodes = Array.isArray(errPayload?.error) ? errPayload.error : errPayload;
+      
+      const summary = Array.isArray(nodes)
+        ? nodes.flatMap((n: any) => Object.values(n?.constraints || {})).slice(0,3).join(' | ')
+        : 'Revisa los campos marcados.';
+      this.toast.error(`Error en el servidor Validación: ${summary}`);
+      this.facade.clearError();
+      return;
+    }
+
+    
   }
 }

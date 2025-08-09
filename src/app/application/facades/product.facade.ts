@@ -25,7 +25,7 @@ export class ProductFacade {
 
   // Estado
   private _loading = signal(false);
-  private _error   = signal<string | null>(null);
+  private _error   = signal<Object | null>(null);
   private _all     = signal<Product[]>([]);
 
   // Selectores
@@ -38,7 +38,7 @@ export class ProductFacade {
     this._loading.set(true); this._error.set(null);
     const res = await this.loadAllUC.execute();
     this._loading.set(false);
-    if (isErr(res)) { this._error.set(res.error); return; }
+    if (isErr(res)) { this._error.set(res); return; }
     this._all.set(res.value);
   }
 
@@ -46,7 +46,7 @@ export class ProductFacade {
     this._loading.set(true); this._error.set(null);
     const res = await this.createUC.execute(p);
     this._loading.set(false);
-    if (isErr(res)) { this._error.set(res.error); return false; }
+    if (isErr(res)) { this._error.set(res); return false; }
     this._all.set([res.value, ...this._all()]);
     return true;
   }
@@ -55,7 +55,7 @@ export class ProductFacade {
     this._loading.set(true); this._error.set(null);
     const res = await this.updateUC.execute(id, p);
     this._loading.set(false);
-    if (isErr(res)) { this._error.set(res.error); return false; }
+    if (isErr(res)) { this._error.set(res); return false; }
     this._all.set(this._all().map(x => x.id === id ? res.value : x));
     return true;
   }
@@ -64,7 +64,7 @@ export class ProductFacade {
     this._loading.set(true); this._error.set(null);
     const res = await this.deleteUC.execute(id);
     this._loading.set(false);
-    if (isErr(res)) { this._error.set(res.error); return false; }
+    if (isErr(res)) { this._error.set(res); return false; }
     this._all.set(this._all().filter(x => x.id !== id));
     return true;
   }
