@@ -4,12 +4,13 @@ import { RouterOutlet } from '@angular/router';
 
 // project import
 import { SpinnerComponent } from './theme/shared/components/spinner/spinner.component';
+import { ToastComponent } from './shared/toast/toast.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [RouterOutlet, SpinnerComponent]
+  imports: [RouterOutlet, SpinnerComponent, ToastComponent]
 })
 export class AppComponent {
   // public props
