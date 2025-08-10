@@ -171,7 +171,7 @@ npm run test:coverage
 
 ---
 
-## Inversión de dependencias
+## Inyección de dependencias
 
 * `application/adapter.ts` expone `PRODUCT_REPOSITORY` (InjectionToken).
 * `infrastructure/api/product-api.service.ts` implementa `core/ports/product.repository.ts` y se inyecta vía el token.
@@ -179,14 +179,13 @@ npm run test:coverage
 
 ---
 
-## 🛠️ Scripts disponibles
+## Scripts disponibles
 
 * `start` → `ng serve` (con proxy).
 * `build` → `ng build` (dev).
 * `build-prod` → `ng build --configuration production --base-href /angular/free/`.
 * `watch` → `ng build --watch --configuration development`.
 * `test`, `test:watch`, `test:coverage` → Jest.
-* `prettier` → formatea `src/`.
 
 ---
 
