@@ -1,6 +1,6 @@
 # Devsu — Frontend (Angular 20)
 
-Proyecto **Angular 20** con **Jest** para pruebas unitarias, **ESLint** + **Prettier** para estilo de código y **proxy** para desarrollo. Este README está basado **exactamente** en la estructura del ZIP (`/frontend`) y usa **npm** (existe `package-lock.json`).
+Proyecto **Angular 20** con **Jest** para pruebas unitarias, para estilo de código y **proxy** para desarrollo. Este README está basado **exactamente** en la estructura del proyecto y usa **npm** (existe `package-lock.json`).
 
 ---
 
@@ -104,7 +104,7 @@ frontend/
 
 ---
 
-## 🧪 Validaciones clave (Product Form)
+## Validaciones clave (Product Form)
 
 * **ID**: requerido, 3–10 chars, **no existente** (verificación API), deshabilitado en **editar**.
 * **Nombre**: 5–100 chars.
@@ -115,7 +115,7 @@ frontend/
 
 ---
 
-## ⚙️ Requisitos
+## Requisitos
 
 * **Node.js 20 LTS** (recomendado)
 * **npm 10+** (se usa `package-lock.json`)
