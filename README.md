@@ -7,11 +7,9 @@ Proyecto **Angular 20** con **Jest** para pruebas unitarias, para estilo de cód
 ## Stack
 
 * **Angular** 20
-* **Bootstrap** 5 + `@ng-bootstrap/ng-bootstrap`
 * **CDK**: `@angular/cdk`
 * **RxJS** 7
 * **Testing**: Jest + `jest-preset-angular` (jsdom)
-* **Linting**: ESLint (flat config) + `angular-eslint`
 * **Formato**: Prettier
 * **HTTP**: `HttpClient`
 
