@@ -8,10 +8,8 @@ export const editAccessGuard: CanActivateFn = (route) => {
 
   const id = route.paramMap.get('id') ?? '';
   const token = route.queryParamMap.get('token');
-  console.log(token)
 
   const ok = svc.validateAndConsume(id, token);
-  console.log(ok)
   if (ok) return true;
 
   router.navigate(['/dashboard/products/list']);

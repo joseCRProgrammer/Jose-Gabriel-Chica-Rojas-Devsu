@@ -36,7 +36,7 @@ export function paginate(
 
   const reserveEdges = edgeButtons ? 2 : 0;
   if (totalPages <= windowSize + reserveEdges) {
-    const vis = edgeButtons ? range(2, Math.max(1, totalPages - 1)) : range(1, totalPages);
+    const vis = range(1, totalPages);
     return state(totalPages, vis, false, false, currentPage);
   }
 
