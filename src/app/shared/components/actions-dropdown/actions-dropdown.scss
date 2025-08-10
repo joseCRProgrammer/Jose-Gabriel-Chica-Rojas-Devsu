@@ -1,0 +1,37 @@
+.adrop {
+  position: relative;
+  display: inline-block;
+
+  .icon-btn {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+  .icon-btn:hover { background:#fff; }
+
+  .dots { font-size: 20px; line-height: 1; color:#444; }
+
+  .menu {
+    background: #fff;
+    border: 1px solid #e6e8f0;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0,0,0,.06);
+    padding: 6px;
+    z-index: 20;
+  }
+
+  .menu.fixed { position: fixed; }
+
+  .menu-item {
+    width: 100%;
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent; border: 0;
+    padding: 8px 10px; border-radius: 8px;
+    cursor: pointer; text-align: left;
+  }
+  .menu-item:hover { background:#f7f8fc; }
+  .menu-item:disabled { opacity:.5; cursor:not-allowed; }
+  .menu-item .mi { width: 18px; text-align:center; }
+}

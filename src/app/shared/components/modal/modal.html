@@ -1,0 +1,35 @@
+@if (open) {
+  <div class="modal-overlay" (click)="onBackdropClick()">
+    <div
+      class="modal-card"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Confirmación"
+      (click)="stop($event)"
+      tabindex="0">
+
+      <div class="modal-body">
+        <p class="message">{{ message }}</p>
+      </div>
+
+      <div class="modal-divider"></div>
+
+      <div class="modal-actions">
+        <app-button
+          [label]="cancelLabel"
+          color="gray"
+          type="button"
+          (clicked)="triggerCancel()">
+        </app-button>
+
+        <app-button
+          [label]="confirmLabel"
+          color="yellow"
+          type="button"
+          [disabled]="confirmDisabled"
+          (clicked)="triggerConfirm()">
+        </app-button>
+      </div>
+    </div>
+  </div>
+}

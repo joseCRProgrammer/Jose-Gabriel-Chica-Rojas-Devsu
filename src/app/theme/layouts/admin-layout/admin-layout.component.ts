@@ -8,10 +8,11 @@ import { RouterModule } from '@angular/router';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { BreadcrumbComponent } from 'src/app/theme/shared/components/breadcrumb/breadcrumb.component';
+import { PageHeader } from 'src/app/shared/components/page-header/page-header';
 
 @Component({
   selector: 'app-admin',
-  imports: [CommonModule, BreadcrumbComponent, NavigationComponent, NavBarComponent, RouterModule],
+  imports: [CommonModule, BreadcrumbComponent, NavigationComponent, NavBarComponent, RouterModule, PageHeader],
   templateUrl: './admin-layout.component.html',
   styleUrls: ['./admin-layout.component.scss']
 })

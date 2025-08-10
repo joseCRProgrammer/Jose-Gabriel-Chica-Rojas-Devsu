@@ -1,0 +1,78 @@
+<div>
+  @if (loading) {
+    <div class="state">Cargando…</div>
+  } @else if (errorMsg) {
+    <div class="state error">{{ errorMsg }}</div>
+  } @else {
+    <div class="table-scroll">
+      <table class="table">
+        <thead>
+          <tr>
+            @for (col of columns; track col.key) {
+              <th
+                [style.width.px]="col.widthPx || null"
+                [class.sortable]="col.sortable"
+                (click)="sortBy(col)">
+                <span class="th-inner">
+                  {{ col.header }}
+                  @if (col.sortable && sortKey === col.key) {
+                    <span class="sort-indicator" [class.desc]="sortDir==='desc'">▲</span>
+                  }
+                </span>
+              </th>
+            }
+            @if (showActions) { <th class="actions-th">Acciones</th> }
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (row of viewRows; track trackRow($index, row); let i = $index) {
+            <tr>
+              @for (col of columns; track col.key) {
+                <td [style.width.px]="col.widthPx || null">
+                  @if (col.key === 'logo') {
+                    @if (cell(row, col)) {
+                      <img [src]="cell(row, col)"
+                      alt="Logo {{ rowLabel(row) }}"
+                      class="logo-img" />
+                    } @else {
+                      <span class="no-logo">Sin logo</span>
+                    }
+                  } @else {
+                    {{ cell(row, col) }}
+                  }
+                </td>
+              }
+
+              @if (showActions) {
+                <td class="actions-td">
+                  <actions-dropdown
+                    [actions]="actions"
+                    (selected)="onActionClick($event, row)">
+                  </actions-dropdown>
+                </td>
+              }
+            </tr>
+          }
+
+          @if (!viewRows?.length) {
+            <tr>
+              <td class="empty" [attr.colspan]="columns.length + (showActions ? 1 : 0)">
+                No hay datos para mostrar.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <ui-pagination
+      [total]="totalFiltered"
+      [pageSize]="pageSize"
+      [page]="1"
+      [maxButtons]="1"
+      [edgeButtons]="true"
+      (pageChange)="goTo($event)"
+      (pageSizeChange)="changePageSize($event)">
+    </ui-pagination>
+  }
+</div>

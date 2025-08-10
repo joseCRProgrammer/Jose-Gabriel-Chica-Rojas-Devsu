@@ -1,0 +1,10 @@
+<button 
+  class="btn" 
+  [class.btn-gray]="color==='gray'"
+  [class.btn-yellow]="color==='yellow'"
+  [class.btn-outline]="color==='outline'"
+  [disabled]="disabled"
+  (click)="onClick()">
+  <ng-content></ng-content>
+  <span class="label">{{ label }}</span>
+</button>

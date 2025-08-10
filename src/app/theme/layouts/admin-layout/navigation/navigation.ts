@@ -26,20 +26,20 @@ export const NavigationItems: NavigationItem[] = [
     icon: 'icon-navigation',
     children: [
       {
-        id: 'Reportes',
-        title: 'Reportes',
+        id: '1',
+        title: 'Listar Productos',
         type: 'item',
         classes: 'nav-item',
-        url: '/dashboard/reports',
+        url: 'dashboard/products/list',
         icon: 'dashboard',
         breadcrumbs: false
       },
       {
-        id: 'Buscar e importar',
-        title: 'Buscar e importar',
+        id: '2',
+        title: 'Crear Productos',
         type: 'item',
         classes: 'nav-item',
-        url: '/dashboard/search-import',
+        url: '/dashboard/products/create',
         icon: 'dashboard',
         breadcrumbs: false
       }

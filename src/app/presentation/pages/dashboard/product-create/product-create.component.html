@@ -1,0 +1,18 @@
+@if (loading()) {
+  <div class="d-flex justify-content-center my-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+} @else {
+<section class="list-page">
+  <div class="card">
+    <app-page-header title="Formulario de Registro" icon="" [showDivider]="true"></app-page-header>
+    <app-product-form 
+    [mode]="'create'" 
+    (submitForm)="onCreate($event)" 
+    >
+    </app-product-form>
+  </div>
+</section>
+}
