@@ -128,7 +128,7 @@ frontend/
 cd frontend
 
 # 2) Instalar dependencias limpias
-npm ci
+npm i
 
 # 3) Desarrollo con proxy (http://localhost:4200)
 ng serve
