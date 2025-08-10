@@ -1,9 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { InjectionToken } from '@angular/core';
-import { ProductFacade } from './product.facade'; // <-- ajusta esta ruta
+import { ProductFacade } from './product.facade';
 import { PRODUCT_REPOSITORY } from '../adapter';
 
-// IMPORTANT: mockeamos isErr para que detecte error cuando el objeto tenga __err: true
 jest.mock('src/app/core/types/result', () => ({
   isErr: (res: any) => !!(res && res.__err === true),
 }));
@@ -20,7 +19,6 @@ type Product = {
 describe('ProductFacade', () => {
   let facade: ProductFacade;
 
-  // Un repo “dummy” solo para satisfacer el inject(PRODUCT_REPOSITORY)
   const repoMock = {};
 
   beforeEach(() => {
@@ -33,8 +31,6 @@ describe('ProductFacade', () => {
 
     facade = TestBed.inject(ProductFacade);
 
-    // Sobrescribimos internamente los casos de uso con mocks controlables.
-    // Nota: aunque sean "private", en runtime están accesibles como propiedades del objeto.
     (facade as any).loadAllUC = { execute: jest.fn() };
     (facade as any).createUC  = { execute: jest.fn() };
     (facade as any).updateUC  = { execute: jest.fn() };
@@ -84,7 +80,6 @@ describe('ProductFacade', () => {
 
   describe('create', () => {
     it('debe agregar el producto al inicio y retornar true (success)', async () => {
-      // estado previo
       (facade as any)._all.set([aProduct('old')]);
 
       const newProd = aProduct('new');
@@ -146,7 +141,6 @@ describe('ProductFacade', () => {
 
       expect(ok).toBe(false);
       expect(facade.error()).toEqual(err);
-      // no debe cambiar la lista
       expect(facade.all()).toEqual([aProduct('p1')]);
     });
   });
@@ -155,7 +149,6 @@ describe('ProductFacade', () => {
     it('debe eliminar el producto y retornar true (success)', async () => {
       (facade as any)._all.set([aProduct('p1'), aProduct('p2')]);
 
-      // Para success, la fachada no usa res.value; solo verifica que NO sea Err
       (facade as any).deleteUC.execute.mockResolvedValue({});
 
       const ok = await facade.remove('p1');
@@ -174,7 +167,6 @@ describe('ProductFacade', () => {
 
       expect(ok).toBe(false);
       expect(facade.error()).toEqual(err);
-      // lista intacta
       expect(facade.all()).toEqual([aProduct('p1'), aProduct('p2')]);
     });
   });

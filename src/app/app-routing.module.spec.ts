@@ -45,7 +45,6 @@ describe('AppRoutingModule', () => {
     expect(edit).toBeTruthy();
     expect(typeof edit?.loadComponent).toBe('function');
 
-    // canActivate es un array de references; comprobamos que contenga el guard
     const guards = (edit?.canActivate ?? []) as any[];
     expect(Array.isArray(guards)).toBe(true);
     expect(guards).toContain(editAccessGuard);
@@ -58,14 +57,11 @@ describe('AppRoutingModule', () => {
     expect(redirect?.pathMatch).toBe('full');
   });
 
-  // Opcional: validar que los dynamic imports resuelven al componente correcto
   it('loadComponent de list/create/edit resuelve al componente esperado', async () => {
     const root = router.config.find(r => r.path === '' && r.component === AdminComponent)!;
 
     const list = root.children?.find(c => c.path === 'dashboard/products/list');
     const listCmp = await (list!.loadComponent as () => Promise<any>)();
-    // El dynamic import devuelve el componente (no un objeto con .default),
-    // por lo que comparamos la referencia directa:
     expect(listCmp).toBe(ProductListComponent);
 
     const create = root.children?.find(c => c.path === 'dashboard/products/create');

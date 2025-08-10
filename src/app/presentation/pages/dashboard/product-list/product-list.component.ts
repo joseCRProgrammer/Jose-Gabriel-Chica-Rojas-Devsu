@@ -82,12 +82,9 @@ export class ProductListComponent implements OnInit {
   }
 
   onAction(ev: { actionId: string; row: Product }) {
-    console.log("aaaa")
-    console.log(ev)
     if (ev.actionId === 'delete') {
       this.productToDelete = ev.row;
       this.confirmOpen = true;
-      console.log(this)
     }
 
     //Comentarios para al revisor de este código
@@ -119,13 +116,11 @@ export class ProductListComponent implements OnInit {
     if (!this.productToDelete) return;
     const id = this.productToDelete.id;
     const exist = await this.facade.verifyId(id);
-    console.log(exist)
     if(exist){
       await this.facade.remove(id);
       this.allProducts = this.allProducts.filter(p => p.id !== id);
       this.filteredProducts = this.allProducts;
       this.toast.success("El producto se ha eliminado correctamente")
-      console.log(this.allProducts)
       this.confirmOpen = false;
       this.productToDelete = null;
     }

@@ -12,9 +12,7 @@ describe('EditIntentService', () => {
     expect(typeof token).toBe('string');
     expect(token.length).toBeGreaterThan(10);
 
-    // Primera validación OK
     expect(svc.validateAndConsume('abc', token)).toBe(true);
-    // Segundo uso del mismo token = false
     expect(svc.validateAndConsume('abc', token)).toBe(false);
   });
 

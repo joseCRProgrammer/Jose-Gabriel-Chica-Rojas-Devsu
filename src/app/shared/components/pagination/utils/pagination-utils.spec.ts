@@ -5,7 +5,7 @@ describe('paginate', () => {
     const s = paginate(100, 10, 5, 5, true);
     expect(s.totalPages).toBe(10);
     expect(s.currentPage).toBe(5);
-    expect(s.visible).toEqual([3, 4, 5, 6, 7]); // 5 botones
+    expect(s.visible).toEqual([3, 4, 5, 6, 7]);
     expect(s.showStartEllipsis).toBe(true);
     expect(s.showEndEllipsis).toBe(true);
   });
