@@ -81,20 +81,16 @@ export class ProductListComponent implements OnInit {
     if (!confirm(`¿Eliminar ${p.name}?`)) return;
   }
 
-  onAction(ev: { actionId: string; row: Product }) {
+  async onAction(ev: { actionId: string; row: Product }) {
     if (ev.actionId === 'delete') {
       this.productToDelete = ev.row;
       this.confirmOpen = true;
     }
-
-    //Comentarios para al revisor de este código
-    //Si el producto es eliminado mientras un usuario está viendo la lista, 
-    //un editIntent con validación en el backend o en la lógica de guard puede impedir que se cargue el formulario.
-    //así se evita casos donde el formulario se abra con datos obsoletos o inconsistentes.
     
     if (ev.actionId === 'edit') {
 
-      const exist = this.facade.verifyId(ev.row.id)
+      const exist = await this.facade.verifyId(ev.row.id)
+      console.log(exist)
       if(exist){
           const token = this.editIntent.allowOnce(ev.row.id);
           this.router.navigate(['/dashboard/products/edit', ev.row.id],
