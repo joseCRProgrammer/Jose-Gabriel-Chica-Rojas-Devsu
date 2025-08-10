@@ -4,6 +4,7 @@
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
+    padding-bottom: 10px;
 
     .ellipsis {
         display: inline-flex;
@@ -46,6 +47,7 @@
 
         button:hover {
             background: #f4f6ff;
+            color: #2f3772;
         }
 
         button:disabled {

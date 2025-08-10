@@ -9,18 +9,11 @@
     background: transparent;
     cursor: pointer;
   }
-  .icon-btn:hover { background:#fff }
+  .icon-btn:hover { background:#fff; }
 
-  .dots {
-    font-size: 20px;
-    line-height: 1;
-    color: #444;
-  }
+  .dots { font-size: 20px; line-height: 1; color:#444; }
 
   .menu {
-    position: absolute;
-    right: 0; top: calc(100% + 6px);
-    min-width: 160px;
     background: #fff;
     border: 1px solid #e6e8f0;
     border-radius: 10px;
@@ -29,17 +22,16 @@
     z-index: 20;
   }
 
+  .menu.fixed { position: fixed; }
+
   .menu-item {
     width: 100%;
     display: inline-flex; align-items: center; gap: 8px;
-    background: transparent;
-    border: 0;
-    padding: 8px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    text-align: left;
+    background: transparent; border: 0;
+    padding: 8px 10px; border-radius: 8px;
+    cursor: pointer; text-align: left;
   }
-  .menu-item:hover { background: #f7f8fc; }
-  .menu-item:disabled { opacity: .5; cursor: not-allowed; }
-  .menu-item .mi { font-size: 18px; color: #5b5f7a; }
+  .menu-item:hover { background:#f7f8fc; }
+  .menu-item:disabled { opacity:.5; cursor:not-allowed; }
+  .menu-item .mi { width: 18px; text-align:center; }
 }

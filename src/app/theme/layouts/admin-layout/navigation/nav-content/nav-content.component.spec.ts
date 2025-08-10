@@ -124,6 +124,103 @@ describe('NavContentComponent', () => {
     }
   });
 
+  it('fireOutClick: activates up_parent when it has .coded-hasmenu', () => {
+    locationStrategyMock.getBaseHref.mockReturnValue('');
+    locationMock.path.mockReturnValue('/u');
+
+    const up = document.createElement('li');
+    up.className = 'coded-hasmenu';
+
+    const ul = document.createElement('ul');
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.className = 'nav-link';
+    a.setAttribute('href', '/u');
+
+    li.appendChild(a);
+    ul.appendChild(li);
+    up.appendChild(ul);
+
+    const cleanup = appendToBody(up);
+    try {
+      setWindowWidth(1200);
+      fixture = TestBed.createComponent(NavContentComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+
+      component.fireOutClick();
+
+      expect(up.classList.contains('coded-trigger')).toBe(true);
+      expect(up.classList.contains('active')).toBe(true);
+    } finally {
+      cleanup();
+    }
+  });
+
+  it('fireOutClick: activates last_parent when it has .coded-hasmenu', () => {
+    locationStrategyMock.getBaseHref.mockReturnValue('');
+    locationMock.path.mockReturnValue('/v');
+
+    const last = document.createElement('li');
+    last.className = 'coded-hasmenu';
+
+    const ul2 = document.createElement('ul');
+    const mid = document.createElement('li');
+    const ul1 = document.createElement('ul');
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.className = 'nav-link';
+    a.setAttribute('href', '/v');
+
+    li.appendChild(a);
+    ul1.appendChild(li);
+    mid.appendChild(ul1);
+    ul2.appendChild(mid);
+    last.appendChild(ul2);
+
+    const cleanup = appendToBody(last);
+    try {
+      setWindowWidth(1200);
+      fixture = TestBed.createComponent(NavContentComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+
+      component.fireOutClick();
+
+      expect(last.classList.contains('coded-trigger')).toBe(false);
+      expect(last.classList.contains('active')).toBe(false);
+    } finally {
+      cleanup();
+    }
+  });
+
+  it('fireOutClick: does nothing when no matching link exists', () => {
+    locationStrategyMock.getBaseHref.mockReturnValue('');
+    locationMock.path.mockReturnValue('/nope');
+
+    const up = document.createElement('li');
+    up.className = 'coded-hasmenu';
+    const a = document.createElement('a');
+    a.className = 'nav-link';
+    a.setAttribute('href', '/other');
+    up.appendChild(a);
+
+    const cleanup = appendToBody(up);
+    try {
+      setWindowWidth(1200);
+      fixture = TestBed.createComponent(NavContentComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+
+      component.fireOutClick();
+
+      expect(up.classList.contains('coded-trigger')).toBe(false);
+      expect(up.classList.contains('active')).toBe(false);
+    } finally {
+      cleanup();
+    }
+  });
+
   it('fireOutClick: resolves with baseHref when provided', () => {
     locationStrategyMock.getBaseHref.mockReturnValue('/base/');
     locationMock.path.mockReturnValue('section/page');
