@@ -34,7 +34,6 @@ describe('ProductCreateComponent', () => {
       imports: [ProductCreateComponent],
       providers: [
         { provide: Router, useValue: routerMock },
-        { provide: 'ProductFacade', useValue: facadeMock },
         { provide: (require('src/app/application/facades/product.facade').ProductFacade), useValue: facadeMock },
         { provide: (require('src/app/shared/components/toast/toast.service').ToastService), useValue: toastMock },
       ],
@@ -63,7 +62,7 @@ describe('ProductCreateComponent', () => {
   });
 
   it('creación exitosa: muestra toast.success y navega a la lista', async () => {
-    facadeMock.verifyId.mockResolvedValue(false); 
+    facadeMock.verifyId.mockResolvedValue(false);
     facadeMock.create.mockResolvedValue(true);
 
     await component.onCreate(aProduct('new-id'));
@@ -109,6 +108,45 @@ describe('ProductCreateComponent', () => {
     expect(toastMock.error).toHaveBeenCalledWith(
       'Error en el servidor Validación: Revisa los campos marcados.'
     );
+    expect(facadeMock.clearError).toHaveBeenCalled();
+  });
+
+
+  it('creación falla con error() === null → usa mensaje por defecto', async () => {
+    facadeMock.verifyId.mockResolvedValue(false);
+    facadeMock.create.mockResolvedValue(false);
+
+    facadeMock.error.mockReturnValue(null);
+
+    await component.onCreate(aProduct('bad-null'));
+
+    expect(toastMock.error).toHaveBeenCalledWith(
+      'Error en el servidor Validación: Revisa los campos marcados.'
+    );
+    expect(facadeMock.clearError).toHaveBeenCalled();
+  });
+
+  it('creación falla con error.error = [] (array vacío) → summary vacío', async () => {
+    facadeMock.verifyId.mockResolvedValue(false);
+    facadeMock.create.mockResolvedValue(false);
+
+    facadeMock.error.mockReturnValue({ error: [] });
+
+    await component.onCreate(aProduct('bad-empty'));
+
+    expect(toastMock.error).toHaveBeenCalledWith('Error en el servidor Validación: ');
+    expect(facadeMock.clearError).toHaveBeenCalled();
+  });
+
+  it('creación falla con error.error sin constraints válidos → summary vacío', async () => {
+    facadeMock.verifyId.mockResolvedValue(false);
+    facadeMock.create.mockResolvedValue(false);
+
+    facadeMock.error.mockReturnValue({ error: [{}, { constraints: {} }] });
+
+    await component.onCreate(aProduct('bad-noconst'));
+
+    expect(toastMock.error).toHaveBeenCalledWith('Error en el servidor Validación: ');
     expect(facadeMock.clearError).toHaveBeenCalled();
   });
 });

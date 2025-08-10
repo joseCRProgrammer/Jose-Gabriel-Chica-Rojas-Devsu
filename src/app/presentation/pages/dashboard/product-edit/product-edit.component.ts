@@ -36,7 +36,6 @@ export class ProductEditComponent implements OnInit {
   }
 
   async onUpdate(p: Product) {
-      // Verificar ID antes de actualizar
     const idAvailable = await this.facade.verifyId(p.id);
 
     if (!idAvailable) {
@@ -47,7 +46,6 @@ export class ProductEditComponent implements OnInit {
       return;
     }
 
-     // Actualizar producto
     const ok = await this.facade.update(this.id, p);
     if (ok) {
       this.toast.success('Producto actualizado con éxito');
